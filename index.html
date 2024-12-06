@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Caesar Cipher Encrypt/Decrypt</title>
+</head>
+<body>
+    <h1>Caesar Cipher Encrypt/Decrypt</h1>
+    
+    <!-- Text input -->
+    <textarea id="inputText" rows="4" cols="50" placeholder="Enter your text here"></textarea><br><br>
+    
+    <!-- Choose encrypt or decrypt -->
+    <label><input type="radio" name="action" value="encrypt" checked> Encrypt</label>
+    <label><input type="radio" name="action" value="decrypt"> Decrypt</label><br><br>
+    
+    <!-- Shift number -->
+    <label for="shift">Shift Number:</label>
+    <input type="number" id="shift" value="2"><br><br>
+    
+    <!-- Shift direction -->
+    <label><input type="radio" name="direction" value="left" checked> Left</label>
+    <label><input type="radio" name="direction" value="right"> Right</label><br><br>
+    
+    <!-- Button to process -->
+    <button onclick="process()">Submit</button>
+    
+    <h2>Result:</h2>
+    <p id="result"></p>
+    
+    <script>
+        // Process the input based on user selections
+        function process() {
+            let text = document.getElementById("inputText").value;
+            let action = document.querySelector('input[name="action"]:checked').value;
+            let shift = parseInt(document.getElementById("shift").value);
+            let direction = document.querySelector('input[name="direction"]:checked').value;
+            
+            // Adjust shift for direction and action
+            if(direction === "left") {
+                shift = -shift;
+            }
+            if(action === "decrypt") {
+                shift = -shift;
+            }
+
+            // Get the result using Caesar Cipher
+            let result = caesarCipher(text, shift);
+            
+            // Display the result
+            document.getElementById("result").innerText = result;
+        }
+
+        // Caesar Cipher function
+        function caesarCipher(str, shift) {
+            let result = "";
+            for(let i = 0; i < str.length; i++) {
+                let c = str[i];
+                if (c.match(/[a-z]/i)) { // Check if letter
+                    let code = str.charCodeAt(i);
+                    if (code >= 65 && code <= 90) { // Uppercase
+                        c = String.fromCharCode(((code - 65 + shift) % 26 + 26) % 26 + 65);
+                    }
+                    else if (code >= 97 && code <= 122) { // Lowercase
+                        c = String.fromCharCode(((code - 97 + shift) % 26 + 26) % 26 + 97);
+                    }
+                }
+                result += c;
+            }
+            return result;
+        }
+    </script>
+</body>
+</html>
